@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.shenghui.category.dao.mapper.CategoryMapper">
+    <select id="getRowNum">
+        select count(*) from category;
+    </select>
+
+    <update id="truncateCategory">
+        truncate table Category;
+    </update>
+
+    <insert id="createCategory" parameterType="cn.shenghui.category.dao.model.Category">
+        insert category_name, parent_id into category
+        values (category_name)
+    </insert>
+</mapper>
