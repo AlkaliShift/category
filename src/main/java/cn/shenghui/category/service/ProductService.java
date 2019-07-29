@@ -27,8 +27,8 @@ public class ProductService {
      */
     public Product createProduct(Product product) {
         int productId = (int)(1+Math.random()*(100-1+1));
-        product.setProduct_id(productId);
-        product.setProduct_num(1000);
+        product.setProductId(productId);
+        product.setProductNum(1000);
         product = productMapper.createProduct(product);
         return product;
     }

@@ -1,4 +1,4 @@
-package cn.shenghui.category.base;
+package cn.shenghui.base;
 
 import lombok.Data;
 

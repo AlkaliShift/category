@@ -1,6 +1,6 @@
-package cn.shenghui.category.rest.response;
+package cn.shenghui.rest.response;
 
-import cn.shenghui.category.base.AbstractResponse;
+import cn.shenghui.base.AbstractResponse;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

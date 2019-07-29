@@ -1,4 +1,4 @@
-package cn.shenghui.category;
+package cn.shenghui;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

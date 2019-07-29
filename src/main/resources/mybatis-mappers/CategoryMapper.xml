@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.shenghui.category.dao.mapper.CategoryMapper">
-    <select id="getRowNum">
-        select count(*) from category;
-    </select>
+    <resultMap id="categoryResult" type="cn.shenghui.category.dao.model.Category">
+        <id column="category_id" property="categoryId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="del_flag" property="delFlag"/>
+    </resultMap>
 
     <update id="truncateCategory">
         truncate table Category;
     </update>
 
+    <select id="selectCategoryList" parameterType="cn.shenghui.category.dao.model.Category" resultMap="categoryResult">
+        select category_id, parent_id, category_name from category where parent_id != 0 and del_flag = 0;
+    </select>
     <insert id="createCategory" parameterType="cn.shenghui.category.dao.model.Category">
         insert category_name, parent_id into category
         values (category_name)

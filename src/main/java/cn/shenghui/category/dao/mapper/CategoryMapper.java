@@ -3,6 +3,8 @@ package cn.shenghui.category.dao.mapper;
 import cn.shenghui.category.dao.model.Category;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 /**
  * @author shenghui
  * @version 1.0
@@ -10,11 +12,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface CategoryMapper {
-    /**
-     * get the number of rows
-     * @return
-     */
-    int getRowNum();
 
     /**
      * clear category
@@ -22,8 +19,17 @@ public interface CategoryMapper {
     void truncateCategory();
 
     /**
+     * select category list
+     * @param category
+     * @return
+     */
+    List<Category> selectCategoryList(Category category);
+
+    /**
      * create one category
      * @param category
      */
     void createCategory(Category category);
+
+
 }

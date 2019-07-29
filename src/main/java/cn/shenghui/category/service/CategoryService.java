@@ -5,6 +5,8 @@ import cn.shenghui.category.dao.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author shenghui
  * @version 1.0
@@ -20,13 +22,17 @@ public class CategoryService {
         this.categoryMapper = categoryMapper;
     }
 
+    /**
+     * select category list
+     * @param category
+     * @return
+     */
+    public List<Category> selectCategoryList(Category category) {
+        return categoryMapper.selectCategoryList(category);
+    }
+
     public Category createCategory(Category category){
-        int row = categoryMapper.getRowNum();
-        if(row == 0){
-
-        }else{
-
-        }
+        categoryMapper.truncateCategory();
         return category;
     }
 }

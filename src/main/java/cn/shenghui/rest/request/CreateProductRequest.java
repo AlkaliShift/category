@@ -1,6 +1,5 @@
-package cn.shenghui.category.rest.response;
+package cn.shenghui.rest.request;
 
-import cn.shenghui.category.base.AbstractResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,14 +7,11 @@ import lombok.Data;
 /**
  * @author shenghui
  * @version 1.0
- * @since 2019/7/29 10:24
+ * @since 2019/7/29 10:23
  */
 @Data
-@ApiModel(value = "product information")
-public class ProductResponse extends AbstractResponse {
-    @ApiModelProperty(value = "product id")
-    int product_id;
-
+@ApiModel(value = "enter one product")
+public class CreateProductRequest {
     @ApiModelProperty(value = "product name")
     String product_name;
 

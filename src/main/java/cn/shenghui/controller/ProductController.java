@@ -1,8 +1,8 @@
-package cn.shenghui.category.controller;
+package cn.shenghui.controller;
 
 import cn.shenghui.category.dao.model.Product;
-import cn.shenghui.category.rest.request.CreateProductRequest;
-import cn.shenghui.category.rest.response.ProductResponse;
+import cn.shenghui.rest.request.CreateProductRequest;
+import cn.shenghui.rest.response.ProductResponse;
 import cn.shenghui.category.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,16 +31,16 @@ public class ProductController {
     @PostMapping("/createProduct")
     public ProductResponse createProduct(@RequestBody CreateProductRequest createProductRequest){
         Product product = new Product();
-        product.setProduct_name(createProductRequest.getProduct_name());
-        product.setProduct_category(createProductRequest.getProduct_category());
-        product.setProduct_num(createProductRequest.getProduct_num());
+        product.setProductName(createProductRequest.getProduct_name());
+        product.setProductCategory(createProductRequest.getProduct_category());
+        product.setProductNum(createProductRequest.getProduct_num());
         product = productService.createProduct(product);
 
         ProductResponse response = new ProductResponse();
-        response.setProduct_id(product.getProduct_id());
-        response.setProduct_name(product.getProduct_name());
-        response.setProduct_category(product.getProduct_category());
-        response.setProduct_num(product.getProduct_num());
+        response.setProduct_id(product.getProductId());
+        response.setProduct_name(product.getProductName());
+        response.setProduct_category(product.getProductCategory());
+        response.setProduct_num(product.getProductNum());
         response.setStatusCode(1);
         return response;
     }

@@ -13,20 +13,20 @@ public class Product {
     /**
      * product id
      */
-    int product_id;
+    int productId;
 
     /**
      * product name
      */
-    String product_name;
+    String productName;
 
     /**
      * product category
      */
-    int product_category;
+    int productCategory;
 
     /**
      * product quantity
      */
-    int product_num;
+    int productNum;
 }
