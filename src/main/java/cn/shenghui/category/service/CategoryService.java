@@ -31,7 +31,19 @@ public class CategoryService {
         return categoryMapper.selectCategoryList(category);
     }
 
+    /**
+     * create category
+     * @param category
+     */
     public void createCategory(Category category){
         categoryMapper.createCategory(category);
+    }
+
+    /**
+     * delete category
+     * @param category
+     */
+    public void deleteCategory(Category category) {
+        categoryMapper.deleteCategory(category);
     }
 }

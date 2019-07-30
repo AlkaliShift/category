@@ -11,15 +11,23 @@
     <select id="selectCategoryList" parameterType="cn.shenghui.category.dao.model.Category" resultMap="categoryResult">
         select * from category
         <where>
-            <if test="parentId != null and parentId != 0">parent_id = #{parentId,jdbcType=INTEGER}</if>
-            <if test="categoryName != null">and category_name = #{categoryName,jdbcType=VARCHAR}</if>
-            and del_flag = 0;
+            <if test="parentId != 0">del_flag = 0</if>
+            <if test="categoryId != 0">and category_id = #{categoryId,jdbcType=INTEGER}</if>
+            <if test="parentId != 0">and parent_id = #{parentId,jdbcType=INTEGER}</if>
+            <if test="ancestors != null">and ancestors = #{ancestors,jdbcType=VARCHAR}</if>
+            <if test="categoryName != null">and category_name = #{categoryName,jdbcType=VARCHAR}</if>;
         </where>
     </select>
 
     <insert id="createCategory" parameterType="cn.shenghui.category.dao.model.Category">
-        insert into category(category_name, parent_id, del_flag) values(
-          <if test="categoryName != null">#{categoryName,jdbcType=VARCHAR}, </if>
-          <if test="parentId != null and parentId != 0">#{parentId,jdbcType=INTEGER}, </if>0);
+        insert into category(category_name, parent_id, ancestors, del_flag) values(
+          #{categoryName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{ancestors,jdbcType=VARCHAR}, 0);
     </insert>
+
+    <update id="deleteCategory" parameterType="cn.shenghui.category.dao.model.Category">
+        update category set del_flag = 1
+        where category_id = #{categoryId,jdbcType=INTEGER} and ancestors = #{ancestors,jdbcType=VARCHAR};
+--         update category set del_flag = 1
+--         where ancestors like concat(#{ancestors,jdbcType=VARCHAR}, ',', #{categoryId,jdbcType=INTEGER}, '%');
+    </update>
 </mapper>

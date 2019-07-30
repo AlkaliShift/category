@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * @author shenghui
  * @version 1.0
@@ -13,9 +15,14 @@ import lombok.Data;
 @Data
 @ApiModel(value = "create an category")
 public class CreateCategoryRequest {
-    @ApiModelProperty(value = "parent id")
-    int parent_id;
+    @ApiModelProperty(value = "parent id", required = true)
+    int parentId;
 
-    @ApiModelProperty(value = "category name")
-    String category_name;
+    @ApiModelProperty(value = "parents' ancestors", required = true)
+    @NotEmpty(message = "Parents' ancestors are empty.")
+    String parentAncestors;
+
+    @ApiModelProperty(value = "category name", required = true)
+    @NotEmpty(message = "Category name is empty.")
+    String categoryName;
 }

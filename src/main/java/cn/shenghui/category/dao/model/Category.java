@@ -24,6 +24,11 @@ public class Category implements Serializable {
     private int parentId;
 
     /**
+     * ancestors
+     */
+    private String ancestors;
+
+    /**
      * category name
      */
     private String categoryName;

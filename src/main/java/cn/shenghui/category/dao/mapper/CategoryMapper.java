@@ -25,4 +25,10 @@ public interface CategoryMapper {
      * @param category
      */
     void createCategory(Category category);
+
+    /**
+     * delete all the categories under it besides this one
+     * @param category
+     */
+    void deleteCategory(Category category);
 }
