@@ -29,4 +29,22 @@
         where del_flag = 0 and
         (category_id = #{categoryId,jdbcType=INTEGER} or ancestors like concat(#{ancestors,jdbcType=VARCHAR}, '%'));
     </update>
+
+    <update id="updateCategory" parameterType="cn.shenghui.category.dao.model.Category">
+        update category set parent_id = #{parentId,jdbcType=INTEGER}, ancestors = #{ancestors,jdbcType=VARCHAR}
+        where category_id = #{categoryId,jdbcType=INTEGER};
+    </update>
+
+    <update id="updateCategoryChildren" parameterType="java.util.List">
+        update category set ancestors =
+        <foreach collection="categories" item="item" index="index"
+                 separator=" " open="case category_id" close="end">
+            when #{item.categoryId} then #{item.ancestors}
+        </foreach>
+        where category_id in
+        <foreach collection="categories" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{item.categoryId}
+        </foreach>
+    </update>
 </mapper>

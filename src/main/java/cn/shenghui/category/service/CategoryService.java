@@ -46,4 +46,31 @@ public class CategoryService {
     public void deleteCategory(Category category) {
         categoryMapper.deleteCategory(category);
     }
+
+    /**
+     * update category
+     * @param category
+     * @return
+     */
+    public int updateCategory(Category category){
+        return categoryMapper.updateCategory(category);
+    }
+
+    /**
+     * update its children
+     * @param category_id
+     * @param ancestors
+     */
+    public void updateCategoryChildren(int category_id, String ancestors) {
+        Category category = new Category();
+        category.setParentId(category_id);
+        List<Category> children = categoryMapper.selectCategoryList(category);
+        if (children.size() > 0) {
+            for (Category child : children) {
+                child.setAncestors(ancestors + "," + category.getParentId());
+                updateCategoryChildren(child.getCategoryId(), child.getAncestors());
+            }
+            categoryMapper.updateCategoryChildren(children);
+        }
+    }
 }

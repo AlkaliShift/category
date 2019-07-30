@@ -1,6 +1,7 @@
 package cn.shenghui.category.dao.mapper;
 
 import cn.shenghui.category.dao.model.Category;
+import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -31,4 +32,18 @@ public interface CategoryMapper {
      * @param category
      */
     void deleteCategory(Category category);
+
+    /**
+     * update one category
+     * @param category
+     * @return
+     */
+    int updateCategory(Category category);
+
+    /**
+     * update its children
+     * @param categories
+     * @return
+     */
+    int updateCategoryChildren(@Param("categories")List<Category> categories);
 }

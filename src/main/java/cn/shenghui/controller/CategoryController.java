@@ -4,6 +4,7 @@ import cn.shenghui.category.dao.model.Category;
 import cn.shenghui.category.service.CategoryService;
 import cn.shenghui.rest.request.CreateCategoryRequest;
 import cn.shenghui.rest.request.DeleteCategoryRequest;
+import cn.shenghui.rest.request.UpdateCategoryRequest;
 import cn.shenghui.rest.response.CategoryBasicResponse;
 import cn.shenghui.rest.response.CategoryListResponse;
 import io.swagger.annotations.Api;
@@ -38,10 +39,10 @@ public class CategoryController {
     @GetMapping("/list")
     public CategoryListResponse list(Category category) {
         CategoryListResponse response = new CategoryListResponse();
-        if(category.getParentId() == 0){
-            response.setStatusInfo(0,"Parent ID cannot be 0.");
+        if (category.getParentId() == 0) {
+            response.setStatusInfo(0, "Parent ID cannot be 0.");
             return response;
-        }else{
+        } else {
             List<Category> categoryList = categoryService.selectCategoryList(category);
             response.setCategoryList(categoryList);
             response.setStatusInfo(1, "Success.");
@@ -53,22 +54,22 @@ public class CategoryController {
             "statusCode = 1, success")
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)
-    public CategoryBasicResponse createCategory(@RequestBody @Validated CreateCategoryRequest createCategoryRequest){
+    public CategoryBasicResponse createCategory(@RequestBody @Validated CreateCategoryRequest createCategoryRequest) {
         CategoryBasicResponse response = new CategoryBasicResponse();
-        if(createCategoryRequest.getParentId() == 0){
-            response.setStatusInfo(0,"Parent ID cannot be 0.");
+        if (createCategoryRequest.getParentId() == 0) {
+            response.setStatusInfo(0, "Parent ID cannot be 0.");
             return response;
-        }else{
+        } else {
             Category category = new Category();
             String categoryName = createCategoryRequest.getCategoryName();
-            int parentId =createCategoryRequest.getParentId();
+            int parentId = createCategoryRequest.getParentId();
             String pAncestors = createCategoryRequest.getParentAncestors();
             category.setCategoryName(categoryName);
             category.setParentId(parentId);
             List<Category> existedCategory = categoryService.selectCategoryList(category);
-            if(!ObjectUtils.isEmpty(existedCategory)){
+            if (!ObjectUtils.isEmpty(existedCategory)) {
                 response.setStatusInfo(0, "Category '" + categoryName + "' has already been created.");
-            }else{
+            } else {
                 String ancestors = pAncestors + "," + parentId;
                 category.setAncestors(ancestors);
                 categoryService.createCategory(category);
@@ -82,22 +83,67 @@ public class CategoryController {
             "statusCode = 1, success")
     @PostMapping("/delete")
     @Transactional(rollbackFor = Exception.class)
-    public CategoryBasicResponse deleteCategory(@RequestBody @Validated DeleteCategoryRequest deleteCategoryRequest){
+    public CategoryBasicResponse deleteCategory(@RequestBody @Validated DeleteCategoryRequest deleteCategoryRequest) {
         CategoryBasicResponse response = new CategoryBasicResponse();
-        if(deleteCategoryRequest.getCategoryId() == 0){
+        if (deleteCategoryRequest.getCategoryId() == 0) {
             response.setStatusInfo(0, "Requests cannot be 0.");
-        }else{
+        } else {
             Category category = new Category();
             category.setCategoryId(deleteCategoryRequest.getCategoryId());
             category.setAncestors(deleteCategoryRequest.getAncestors());
             List<Category> existedCategory = categoryService.selectCategoryList(category);
-            if(ObjectUtils.isEmpty(existedCategory)){
+            if (ObjectUtils.isEmpty(existedCategory)) {
                 response.setStatusInfo(0, "Category not found.");
-            }else{
+            } else {
                 String currentAncestors = category.getAncestors() + "," + category.getCategoryId();
                 category.setAncestors(currentAncestors);
                 categoryService.deleteCategory(category);
                 response.setStatusInfo(1, " Delete success.");
+            }
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "update one category", notes = "statusCode = 0, message; " +
+            "statusCode = 1, success")
+    @PostMapping("/update")
+    @Transactional(rollbackFor = Exception.class)
+    public CategoryBasicResponse updateCategory(@RequestBody @Validated UpdateCategoryRequest updateCategoryRequest) {
+        CategoryBasicResponse response = new CategoryBasicResponse();
+        if (updateCategoryRequest.getCategoryId() == 0 ||
+                updateCategoryRequest.getParentId() == 0 ||
+                updateCategoryRequest.getTargetCategoryId() == 0) {
+            response.setStatusInfo(0, "ID cannot be 0.");
+        } else {
+            Category category = new Category();
+            category.setCategoryId(updateCategoryRequest.getCategoryId());
+            List<Category> categoryList = categoryService.selectCategoryList(category);
+            if (!ObjectUtils.isEmpty(categoryList)){
+                category = categoryList.get(0);
+
+                Category targetCategory = new Category();
+
+                targetCategory.setCategoryId(updateCategoryRequest.getTargetCategoryId());
+                List<Category> targetCategoryList = categoryService.selectCategoryList(targetCategory);
+
+                if (!ObjectUtils.isEmpty(targetCategoryList)){
+                    targetCategory = targetCategoryList.get(0);
+                    category.setParentId(targetCategory.getCategoryId());
+                    String ancestors = targetCategory.getAncestors() + "," + targetCategory.getCategoryId();
+                    category.setAncestors(ancestors);
+                    int result = categoryService.updateCategory(category);
+
+                    categoryService.updateCategoryChildren(category.getCategoryId(), ancestors);
+                    if (result == 1){
+                        response.setStatusInfo(1, "Update success.");
+                    } else {
+                        response.setStatusInfo(0, "Update failed.");
+                    }
+                } else {
+                    response.setStatusInfo(0, "Target category not found.");
+                }
+            } else {
+                response.setStatusInfo(0, "Category not found.");
             }
         }
         return response;
