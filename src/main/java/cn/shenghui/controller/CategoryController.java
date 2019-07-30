@@ -118,7 +118,7 @@ public class CategoryController {
             Category category = new Category();
             category.setCategoryId(updateCategoryRequest.getCategoryId());
             List<Category> categoryList = categoryService.selectCategoryList(category);
-            if (!ObjectUtils.isEmpty(categoryList)){
+            if (!ObjectUtils.isEmpty(categoryList)) {
                 category = categoryList.get(0);
 
                 Category targetCategory = new Category();
@@ -126,15 +126,14 @@ public class CategoryController {
                 targetCategory.setCategoryId(updateCategoryRequest.getTargetCategoryId());
                 List<Category> targetCategoryList = categoryService.selectCategoryList(targetCategory);
 
-                if (!ObjectUtils.isEmpty(targetCategoryList)){
+                if (!ObjectUtils.isEmpty(targetCategoryList)) {
                     targetCategory = targetCategoryList.get(0);
                     category.setParentId(targetCategory.getCategoryId());
                     String ancestors = targetCategory.getAncestors() + "," + targetCategory.getCategoryId();
                     category.setAncestors(ancestors);
                     int result = categoryService.updateCategory(category);
-
                     categoryService.updateCategoryChildren(category.getCategoryId(), ancestors);
-                    if (result == 1){
+                    if (result == 1) {
                         response.setStatusInfo(1, "Update success.");
                     } else {
                         response.setStatusInfo(0, "Update failed.");
