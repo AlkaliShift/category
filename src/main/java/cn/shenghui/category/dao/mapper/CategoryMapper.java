@@ -14,11 +14,6 @@ import java.util.List;
 public interface CategoryMapper {
 
     /**
-     * clear category
-     */
-    void truncateCategory();
-
-    /**
      * select category list
      * @param category
      * @return
@@ -30,6 +25,4 @@ public interface CategoryMapper {
      * @param category
      */
     void createCategory(Category category);
-
-
 }

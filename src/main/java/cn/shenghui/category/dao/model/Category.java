@@ -33,5 +33,5 @@ public class Category implements Serializable {
      * 0 means exist
      * 1 means deleted
      */
-    private String delFlag;
+    private char delFlag;
 }

@@ -8,15 +8,18 @@
         <result column="del_flag" property="delFlag"/>
     </resultMap>
 
-    <update id="truncateCategory">
-        truncate table Category;
-    </update>
-
     <select id="selectCategoryList" parameterType="cn.shenghui.category.dao.model.Category" resultMap="categoryResult">
-        select category_id, parent_id, category_name from category where parent_id != 0 and del_flag = 0;
+        select * from category
+        <where>
+            <if test="parentId != null and parentId != 0">parent_id = #{parentId,jdbcType=INTEGER}</if>
+            <if test="categoryName != null">and category_name = #{categoryName,jdbcType=VARCHAR}</if>
+            and del_flag = 0;
+        </where>
     </select>
+
     <insert id="createCategory" parameterType="cn.shenghui.category.dao.model.Category">
-        insert category_name, parent_id into category
-        values (category_name)
+        insert into category(category_name, parent_id, del_flag) values(
+          <if test="categoryName != null">#{categoryName,jdbcType=VARCHAR}, </if>
+          <if test="parentId != null and parentId != 0">#{parentId,jdbcType=INTEGER}, </if>0);
     </insert>
 </mapper>

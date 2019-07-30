@@ -31,8 +31,7 @@ public class CategoryService {
         return categoryMapper.selectCategoryList(category);
     }
 
-    public Category createCategory(Category category){
-        categoryMapper.truncateCategory();
-        return category;
+    public void createCategory(Category category){
+        categoryMapper.createCategory(category);
     }
 }
