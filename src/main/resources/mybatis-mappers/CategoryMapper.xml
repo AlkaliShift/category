@@ -11,7 +11,7 @@
     <select id="selectCategoryList" parameterType="cn.shenghui.category.dao.model.Category" resultMap="categoryResult">
         select * from category
         <where>
-            <if test="parentId != 0">del_flag = 0</if>
+            del_flag = 0
             <if test="categoryId != 0">and category_id = #{categoryId,jdbcType=INTEGER}</if>
             <if test="parentId != 0">and parent_id = #{parentId,jdbcType=INTEGER}</if>
             <if test="ancestors != null">and ancestors = #{ancestors,jdbcType=VARCHAR}</if>
@@ -26,8 +26,7 @@
 
     <update id="deleteCategory" parameterType="cn.shenghui.category.dao.model.Category">
         update category set del_flag = 1
-        where category_id = #{categoryId,jdbcType=INTEGER} and ancestors = #{ancestors,jdbcType=VARCHAR};
---         update category set del_flag = 1
---         where ancestors like concat(#{ancestors,jdbcType=VARCHAR}, ',', #{categoryId,jdbcType=INTEGER}, '%');
+        where del_flag = 0 and
+        (category_id = #{categoryId,jdbcType=INTEGER} or ancestors like concat(#{ancestors,jdbcType=VARCHAR}, '%'));
     </update>
 </mapper>

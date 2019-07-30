@@ -72,7 +72,7 @@ public class CategoryController {
                 String ancestors = pAncestors + "," + parentId;
                 category.setAncestors(ancestors);
                 categoryService.createCategory(category);
-                response.setStatusInfo(1, "Success.");
+                response.setStatusInfo(1, "Insert success.");
             }
             return response;
         }
@@ -94,8 +94,10 @@ public class CategoryController {
             if(ObjectUtils.isEmpty(existedCategory)){
                 response.setStatusInfo(0, "Category not found.");
             }else{
+                String currentAncestors = category.getAncestors() + "," + category.getCategoryId();
+                category.setAncestors(currentAncestors);
                 categoryService.deleteCategory(category);
-                response.setStatusInfo(1, "Success.");
+                response.setStatusInfo(1, " Delete success.");
             }
         }
         return response;
