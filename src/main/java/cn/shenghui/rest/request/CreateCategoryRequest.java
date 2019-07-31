@@ -18,10 +18,6 @@ public class CreateCategoryRequest {
     @ApiModelProperty(value = "parent id", required = true)
     int parentId;
 
-    @ApiModelProperty(value = "parents' ancestors", required = true)
-    @NotEmpty(message = "Parents' ancestors are empty.")
-    String parentAncestors;
-
     @ApiModelProperty(value = "category name", required = true)
     @NotEmpty(message = "Category name is empty.")
     String categoryName;

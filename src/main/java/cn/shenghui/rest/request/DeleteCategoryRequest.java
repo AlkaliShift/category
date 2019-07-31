@@ -17,8 +17,4 @@ public class DeleteCategoryRequest {
 
     @ApiModelProperty(value = "category id")
     int categoryId;
-
-    @ApiModelProperty(value = "ancestors")
-    @NotEmpty(message = "Ancestors are empty.")
-    String ancestors;
 }

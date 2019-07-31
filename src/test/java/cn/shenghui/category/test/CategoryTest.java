@@ -35,14 +35,13 @@ public class CategoryTest {
     @Test
     @Transactional
     @Rollback
-    public void testCreateCategory() throws Exception{
+    public void testAddCategory() throws Exception{
         mvc.perform(MockMvcRequestBuilders
                 .post("/category/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"categoryName\": \"testName\",\n" +
-                        "  \"parentAncestors\": \"0,100,102\",\n" +
-                        "  \"parentId\": 105\n" +
+                        "  \"parentId\": 100\n" +
                         "}")
         )
                 .andExpect(jsonPath("$.statusCode").value(1))
@@ -68,7 +67,6 @@ public class CategoryTest {
                 .post("/category/delete")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"ancestors\": \"0,100,102\",\n" +
                         "  \"categoryId\": 105\n" +
                         "}")
         )

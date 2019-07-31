@@ -26,7 +26,6 @@ import java.util.List;
 @Api(value = "Category")
 @RequestMapping("/category")
 public class CategoryController {
-    private int root = 100;
     private CategoryService categoryService;
 
     @Autowired
@@ -54,26 +53,33 @@ public class CategoryController {
             "statusCode = 1, success")
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)
-    public CategoryBasicResponse createCategory(@RequestBody @Validated CreateCategoryRequest createCategoryRequest) {
+    public CategoryBasicResponse createCategory(@RequestBody @Validated CreateCategoryRequest createCategoryRequest){
         CategoryBasicResponse response = new CategoryBasicResponse();
-        if (createCategoryRequest.getParentId() == 0) {
-            response.setStatusInfo(0, "Parent ID cannot be 0.");
+        if(createCategoryRequest.getParentId() == 0){
+            response.setStatusInfo(0,"Parent ID cannot be 0.");
             return response;
-        } else {
-            Category category = new Category();
-            String categoryName = createCategoryRequest.getCategoryName();
-            int parentId = createCategoryRequest.getParentId();
-            String pAncestors = createCategoryRequest.getParentAncestors();
-            category.setCategoryName(categoryName);
-            category.setParentId(parentId);
-            List<Category> existedCategory = categoryService.selectCategoryList(category);
-            if (!ObjectUtils.isEmpty(existedCategory)) {
-                response.setStatusInfo(0, "Category '" + categoryName + "' has already been created.");
-            } else {
-                String ancestors = pAncestors + "," + parentId;
-                category.setAncestors(ancestors);
-                categoryService.createCategory(category);
-                response.setStatusInfo(1, "Insert success.");
+        }else{
+            int parentId =createCategoryRequest.getParentId();
+            Category parentCategory = new Category();
+            parentCategory.setCategoryId(parentId);
+            List<Category> parentCategoryList = categoryService.selectCategoryList(parentCategory);
+            if(ObjectUtils.isEmpty(parentCategoryList)){
+                response.setStatusInfo(0, "Wrong parent Category.");
+            }else{
+                String pAncestors = parentCategoryList.get(0).getAncestors();
+                Category category = new Category();
+                String categoryName = createCategoryRequest.getCategoryName();
+                category.setCategoryName(categoryName);
+                category.setParentId(parentId);
+                List<Category> existedCategory = categoryService.selectCategoryList(category);
+                if(!ObjectUtils.isEmpty(existedCategory)){
+                    response.setStatusInfo(0, "Category '" + categoryName + "' has already been created.");
+                }else{
+                    String ancestors = pAncestors + "," + parentId;
+                    category.setAncestors(ancestors);
+                    categoryService.createCategory(category);
+                    response.setStatusInfo(1, "Success.");
+                }
             }
             return response;
         }
@@ -90,12 +96,11 @@ public class CategoryController {
         } else {
             Category category = new Category();
             category.setCategoryId(deleteCategoryRequest.getCategoryId());
-            category.setAncestors(deleteCategoryRequest.getAncestors());
             List<Category> existedCategory = categoryService.selectCategoryList(category);
             if (ObjectUtils.isEmpty(existedCategory)) {
                 response.setStatusInfo(0, "Category not found.");
             } else {
-                String currentAncestors = category.getAncestors() + "," + category.getCategoryId();
+                String currentAncestors = existedCategory.get(0).getAncestors() + "," + category.getCategoryId();
                 category.setAncestors(currentAncestors);
                 categoryService.deleteCategory(category);
                 response.setStatusInfo(1, " Delete success.");
