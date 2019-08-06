@@ -8,12 +8,14 @@ import cn.shenghui.rest.request.UpdateCategoryRequest;
 import cn.shenghui.rest.response.CategoryBasicResponse;
 import cn.shenghui.rest.response.CategoryListResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -31,6 +33,14 @@ public class CategoryController {
     @Autowired
     public void setCategoryService(CategoryService categoryService) {
         this.categoryService = categoryService;
+    }
+
+    @ApiModelProperty(value = "get category page")
+    @GetMapping("")
+    public ModelAndView getCategoryPage(){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("category");
+        return mv;
     }
 
     @ApiOperation(value = "get all categories", notes = "statusCode = 0, failed; " +
