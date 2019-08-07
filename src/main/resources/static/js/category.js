@@ -22,19 +22,23 @@ $(document).ready(function () {
             });
         }
 
-        function search(obj, temp){
+        function search(obj, temp) {
             for (i in temp) {
                 var id = temp[i].id;
                 if (obj.data.id === id) {
                     var children = getList(obj.data.id).categories;
-                    if (children == null){
+                    if (children == null) {
                         return;
                     }
                     temp[i].children = [];
                     for (j in children) {
-                        temp[i].children.push({title: children[j].categoryName, id: children[j].categoryId, spread: true});
+                        temp[i].children.push({
+                            title: children[j].categoryName,
+                            id: children[j].categoryId,
+                            spread: true
+                        });
                     }
-                }else{
+                } else {
                     search(obj, temp[i].children);
                 }
             }

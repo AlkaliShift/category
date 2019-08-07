@@ -8,7 +8,6 @@ import cn.shenghui.rest.request.UpdateCategoryRequest;
 import cn.shenghui.rest.response.CategoryBasicResponse;
 import cn.shenghui.rest.response.CategoryListResponse;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @ApiModelProperty(value = "get category page")
+    @ApiOperation(value = "get category page")
     @GetMapping("")
     public ModelAndView getCategoryPage(){
         ModelAndView mv = new ModelAndView();
